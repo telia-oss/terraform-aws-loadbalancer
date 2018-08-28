@@ -23,6 +23,16 @@ variable "internal" {
   default     = "false"
 }
 
+variable "access_logs_prefix" {
+  description = "Prefix for access log bucket items."
+  default     = ""
+}
+
+variable "access_logs_bucket" {
+  description = "Bucket for ELB access logs."
+  default     = ""
+}
+
 variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
   type        = "map"
