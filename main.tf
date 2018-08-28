@@ -5,6 +5,14 @@ locals {
   name_prefix = "${var.name_prefix}-${var.type == "network" ? "nlb" : "alb"}"
 }
 
+data "null_data_source" "access_logs" {
+  access_logs = {
+    prefix  = "${var.access_logs_prefix}"
+    bucket  = "${var.access_logs_bucket}"
+    enabled = "true"
+  }
+}
+
 resource "aws_lb" "main" {
   name               = "${local.name_prefix}"
   load_balancer_type = "${var.type}"
@@ -12,11 +20,7 @@ resource "aws_lb" "main" {
   subnets            = ["${var.subnet_ids}"]
   security_groups    = ["${aws_security_group.main.*.id}"]
 
-  access_logs {
-    prefix  = "${var.access_logs_prefix}"
-    bucket  = "${var.access_logs_bucket}"
-    enabled = "${var.access_logs_bucket  != "" ? "true" : "false" }"
-  }
+  access_logs = "${var.access_logs_bucket != "" ? data.null_data_source.access_logs : ""}"
 
   tags = "${merge(var.tags, map("Name", "${local.name_prefix}"))}"
 }
