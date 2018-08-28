@@ -6,7 +6,7 @@ locals {
 }
 
 resource "aws_lb" "main" {
-  count = "${var.access_logs_bucket == "" ? 0 : 1}"
+  count = "${var.access_logs_bucket == "" ? 1 : 0}"
 
   name               = "${local.name_prefix}"
   load_balancer_type = "${var.type}"
@@ -18,7 +18,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb" "main_with_access_logs" {
-  count  ="${var.access_logs_bucket != "" ? 0 : 1}"
+  count  ="${var.access_logs_bucket == "" ? 0 : 1}"
   name               = "${local.name_prefix}"
   load_balancer_type = "${var.type}"
   internal           = "${var.internal}"
