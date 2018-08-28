@@ -15,7 +15,7 @@ module "alb" {
   name_prefix = "example"
   vpc_id      = "${data.aws_vpc.main.id}"
   subnet_ids  = ["${data.aws_subnet_ids.main.ids}"]
-  type        = "alb"
+  type        = "application"
 
   tags {
     environment = "prod"
