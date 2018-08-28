@@ -6,7 +6,7 @@ locals {
 }
 
 resource "aws_lb" "main" {
-  count = "${var.access_logs_bucket == "" ? "1" : "0"}}"
+  count = "${var.access_logs_bucket == "" ? 0 : 1}"
 
   name               = "${local.name_prefix}"
   load_balancer_type = "${var.type}"
@@ -17,8 +17,8 @@ resource "aws_lb" "main" {
   tags = "${merge(var.tags, map("Name", "${local.name_prefix}"))}"
 }
 
-resource "aws_lb" "main" {
-  count = "${var.access_logs_bucket == "" ? "0" : "1"}}"
+resource "aws_lb" "main_with_access_logs" {
+  count  ="${var.access_logs_bucket != "" ? 0 : 1}"
   name               = "${local.name_prefix}"
   load_balancer_type = "${var.type}"
   internal           = "${var.internal}"
