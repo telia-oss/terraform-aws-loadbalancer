@@ -3,28 +3,27 @@
 # ------------------------------------------------------------------------------
 output "arn" {
   description = "The ARN of the load balancer."
-  value       = "${aws_lb.main.arn}"
+  value       = "${coalesce(join("",aws_lb.main.*.arn), join("", aws_lb.main_with_access_logs.*.arn))}"
 }
 
 output "name" {
-  // arn:aws:elasticloadbalancing:<region>:<account-id>:loadbalancer/app/<name>/<uuid>
   description = "The name of the load balancer."
-  value       = "${element(split("/", aws_lb.main.name), 2)}"
+  value       = "${element(split("/", coalesce(join("",aws_lb.main.*.name),  join("", aws_lb.main_with_access_logs.*.name))),2)}"
 }
 
 output "dns_name" {
   description = "The DNS name of the load balancer."
-  value       = "${aws_lb.main.dns_name}"
+  value       = "${coalesce(join("",aws_lb.main.*.dns_name), join("", aws_lb.main_with_access_logs.*.dns_name))}"
 }
 
 output "zone_id" {
   description = "The canonical hosted zone ID of the load balancer (to be used in a Route 53 Alias record)."
-  value       = "${aws_lb.main.zone_id}"
+  value       = "${coalesce(join("",aws_lb.main.*.zone_id), join("", aws_lb.main_with_access_logs.*.zone_id))}"
 }
 
 output "origin_id" {
   description = "First part of the DNS name of the load balancer."
-  value       = "${element(split(".", aws_lb.main.dns_name), 0)}"
+  value       = "${element(split(".", coalesce(join("",aws_lb.main.*.dns_name), join("", aws_lb.main_with_access_logs.*.dns_name))),0)}"
 }
 
 output "security_group_id" {
