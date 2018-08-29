@@ -2,9 +2,9 @@
 # Output
 # ------------------------------------------------------------------------------
 output "arn" {
-  description = "The ARN of the load balancer."
-  value       = "${element(concat(aws_lb.main.*.arn, aws_lb.main_with_access_logs.*.arn), 0)}"}
+  description = "The ARN of the load balancer."}
 
+value       = "${element(concat(aws_lb.main.*.arn, aws_lb.main_with_access_logs.*.arn), 0)}"
 output "name" {
   description = "The name of the load balancer."
   value       = "${element(split("/", element(concat(aws_lb.main.*.name, aws_lb.main_with_access_logs.*.name), 0)),2)}"
