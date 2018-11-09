@@ -34,6 +34,47 @@ resource "aws_lb" "main_with_access_logs" {
   tags = "${merge(var.tags, map("Name", "${local.name_prefix}"))}"
 }
 
+resource "aws_lb_ssl_negotiation_policy" "main" {
+  name          = "${local.name_prefix}-tls-policy"
+  load_balancer = "${aws_lb.*.id}"
+  lb_port       = 443
+
+  attribute {
+    name  = "Protocol-TLSv1"
+    value = "false"
+  }
+
+  attribute {
+    name  = "Protocol-TLSv1.1"
+    value = "false"
+  }
+
+  attribute {
+    name  = "Protocol-TLSv1.2"
+    value = "true"
+  }
+
+  attribute {
+    name  = "Server-Defined-Cipher-Order"
+    value = "true"
+  }
+
+  attribute {
+    name  = "ECDHE-RSA-AES128-GCM-SHA256"
+    value = "true"
+  }
+
+  attribute {
+    name  = "AES128-GCM-SHA256"
+    value = "true"
+  }
+
+  attribute {
+    name  = "EDH-RSA-DES-CBC3-SHA"
+    value = "false"
+  }
+}
+
 resource "aws_security_group" "main" {
   count       = "${var.type == "network" ? 0 : 1}"
   name        = "${local.name_prefix}-sg"
