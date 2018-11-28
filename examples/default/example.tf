@@ -19,6 +19,7 @@ module "alb" {
     "${data.aws_subnet_ids.main.ids}",
   ]
 
+  idle_timeout = 120
   type = "application"
 
   tags {
