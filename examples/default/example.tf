@@ -20,7 +20,7 @@ module "alb" {
   ]
 
   idle_timeout = 120
-  type = "application"
+  type         = "application"
 
   tags {
     environment = "prod"
