@@ -33,6 +33,11 @@ variable "access_logs_bucket" {
   default     = ""
 }
 
+variable "idle_timeout" {
+  description = "(Optional) The time in seconds that the connection is allowed to be idle. Only valid for Load Balancers of type application. Default: 60."
+  default     = 60
+}
+
 variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
   type        = "map"

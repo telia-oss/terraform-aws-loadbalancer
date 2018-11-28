@@ -13,6 +13,7 @@ resource "aws_lb" "main" {
   internal           = "${var.internal}"
   subnets            = ["${var.subnet_ids}"]
   security_groups    = ["${aws_security_group.main.*.id}"]
+  idle_timeout       = "${var.idle_timeout}"
 
   tags = "${merge(var.tags, map("Name", "${local.name_prefix}"))}"
 }
@@ -24,6 +25,7 @@ resource "aws_lb" "main_with_access_logs" {
   internal           = "${var.internal}"
   subnets            = ["${var.subnet_ids}"]
   security_groups    = ["${aws_security_group.main.*.id}"]
+  idle_timeout       = "${var.idle_timeout}"
 
   access_logs = {
     prefix  = "${var.access_logs_prefix}"
