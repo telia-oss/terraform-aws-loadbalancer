@@ -18,7 +18,7 @@ export AWS_DEFAULT_REGION=eu-west-1
 
 ELB_NAME=`cat terraform-out/terraform-out.json |jq -r '.name.value'`
 
-active_count=`$aws elbv2 describe-load-balancers --names loadbalancer-default-test-alb | jq  '.LoadBalancers[]| select (.State.Code=="active")'| jq -s length`
+active_count=`aws elbv2 describe-load-balancers --names loadbalancer-default-test-alb | jq  '.LoadBalancers[]| select (.State.Code=="active")'| jq -s length`
 
 check_counts active_count 1 "Load Balancer Active"
 exit $tests_failed
