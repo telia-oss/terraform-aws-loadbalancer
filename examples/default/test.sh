@@ -19,7 +19,7 @@ export AWS_DEFAULT_REGION=eu-west-1
 elb_name=`cat terraform-out/terraform-out.json |jq -r '.name.value'`
 
 echo $elb_name
-
+echo `aws elbv2 describe-load-balancers --names $elb_name | jq  '.LoadBalancers[]| select (.State.Code=="active")'`
 active_count=`aws elbv2 describe-load-balancers --names $elb_name | jq  '.LoadBalancers[]| select (.State.Code=="active")'| jq -s length`
 
 
