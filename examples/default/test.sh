@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eo pipefail
+set -eo
 
 # for integer comparisons: check_counts <testValue> <expectedValue> <testName>
 check_counts() {
@@ -20,7 +20,7 @@ elb_name=`cat terraform-out/terraform-out.json |jq -r '.name.value'`
 
 echo $elb_name
 echo `aws elbv2 describe-load-balancers --names $elb_name | jq  '.LoadBalancers[]| select (.State.Code=="active")'`
-active_count=`aws elbv2 describe-load-balancers --names $elb_name | jq  '.LoadBalancers[]| select (.State.Code=="active")'| jq -s length`
+active_count=`aws elbv2 describe-load-balancers --names $elb_name | jq  '.LoadBalancers[]| select (.State.Code=="active")'| jq --slurp length`
 
 
 check_counts active_count 1 "Load Balancer Active"
