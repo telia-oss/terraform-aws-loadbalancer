@@ -10,13 +10,9 @@ data "aws_subnet_ids" "main" {
   vpc_id = "${data.aws_vpc.main.id}"
 }
 
-locals {
-  name_prefix = "loadbalancer-default-test"
-}
-
 module "alb" {
   source      = "../../"
-  name_prefix = "${local.name_prefix}"
+  name_prefix = "alb-logs-bucket-test"
   vpc_id      = "${data.aws_vpc.main.id}"
 
   subnet_ids = [
