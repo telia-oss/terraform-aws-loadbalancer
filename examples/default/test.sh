@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eo
+set -eu
 
 # for integer comparisons: check_counts <testValue> <expectedValue> <testName>
 check_counts() {
