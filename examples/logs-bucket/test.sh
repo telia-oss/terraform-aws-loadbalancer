@@ -23,8 +23,8 @@ account_id=`aws sts get-caller-identity | jq -r .Account`
 active_count=`aws elbv2 describe-load-balancers --names $elb_name | jq  '.LoadBalancers[]| select (.State.Code=="active")'| jq -s length`
 test_file_check=`aws s3api wait object-exists --bucket $bucket_name --key AWSLogs/$account_id/ELBAccessLogTestFile`
 
-check_counts active_count 1 "Load Balancer Active"
-check_counts test_file_check 0 "Test File Written by Loadbalancer"
+check_counts $active_count 1 "Load Balancer Active"
+check_counts $test_file_check 0 "Test File Written by Loadbalancer"
 
 # remove test file so that destroy can remove the bucket
 aws s3 rm s3://$bucket_name/AWSLogs/$account_id/ELBAccessLogTestFile
