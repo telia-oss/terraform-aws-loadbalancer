@@ -66,6 +66,6 @@ resources:
     type: git
     source:
       uri: git@github.com:telia-oss/terraform-aws-loadbalancer.git
-      branch: testingpipeline
+      branch: master
       private_key: ((aws-common-services-deploy-key))
 

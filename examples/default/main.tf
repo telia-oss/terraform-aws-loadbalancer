@@ -26,8 +26,6 @@ data "aws_subnet_ids" "main" {
   vpc_id = "${data.aws_vpc.main.id}"
 }
 
-
-
 module "alb" {
   source      = "../../"
   name_prefix = "loadbalancer-default-test"
@@ -44,5 +42,3 @@ module "alb" {
     terraform   = "True"
   }
 }
-
-

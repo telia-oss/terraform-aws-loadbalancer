@@ -11,7 +11,7 @@ variable "vpc_id" {
 
 variable "log_access" {
   description = "Log access to S3. Defaults to false"
-  default = "false"
+  default     = "false"
 }
 
 variable "subnet_ids" {

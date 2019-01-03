@@ -61,6 +61,7 @@ resource "aws_security_group_rule" "ingress_80" {
 output "access_logs_bucket_arn" {
   value = "${module.alb.access_logs_s3_bucket_arn}"
 }
+
 output "name" {
   value = "${module.alb.name}"
 }

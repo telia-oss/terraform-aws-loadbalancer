@@ -33,5 +33,5 @@ output "security_group_id" {
 
 output "access_logs_s3_bucket_arn" {
   description = "The arn of the S3 bucket logs are written to. Empty if log_access set to \"false\""
-  value = "${aws_s3_bucket.elb_logs.*.arn}"
+  value       = "${aws_s3_bucket.elb_logs.*.arn}"
 }
