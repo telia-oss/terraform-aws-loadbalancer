@@ -12,7 +12,7 @@ data "aws_subnet_ids" "main" {
 
 module "alb" {
   source      = "../../"
-  name_prefix = "example-bech-34"
+  name_prefix = "example"
   vpc_id      = "${data.aws_vpc.main.id}"
 
   subnet_ids = [
@@ -34,8 +34,6 @@ module "alb_nobucket" {
   source      = "../../"
   name_prefix = "example-2"
   vpc_id      = "${data.aws_vpc.main.id}"
-
-  add_cloudwatch_dashboard = "true"
 
   subnet_ids = [
     "${data.aws_subnet_ids.main.ids}",
@@ -65,7 +63,7 @@ resource "aws_security_group_rule" "ingress_80" {
 // see https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-access-logs.html
 
 resource "aws_s3_bucket" "elb" {
-  bucket = "terraform-aws-loadbalancer-c12313"
+  bucket = "terraform-aws-loadbalancer-changeme"
 
   policy = <<EOF
 {
@@ -77,7 +75,7 @@ resource "aws_s3_bucket" "elb" {
       "AWS": "arn:aws:iam::156460612806:root"
     },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::terraform-aws-loadbalancer-c12313/*"
+      "Resource": "arn:aws:s3:::terraform-aws-loadbalancer-changeme/*"
     }
   ]
   }
