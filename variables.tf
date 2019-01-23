@@ -43,3 +43,8 @@ variable "tags" {
   type        = "map"
   default     = {}
 }
+
+variable "add_cloudwatch_dashboard" {
+  description = "If true, add a cloudwatch dashboard with metrics for the loadbalancer"
+  default     = "false"
+}

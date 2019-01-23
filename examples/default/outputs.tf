@@ -21,3 +21,7 @@ output "origin_id" {
 output "security_group_id" {
   value = "${module.alb.security_group_id}"
 }
+
+output "metric_name" {
+  value = "${coalesce(module.alb.arn, "")}"
+}
