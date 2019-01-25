@@ -89,7 +89,7 @@ resource "aws_cloudwatch_dashboard" "main" {
            "width":20,
            "height":6,
            "properties":{
-              "title": "Requestcount & Average Responsetime",
+              "title": "Request count & Average Responsetime",
               "view":"timeSeries",
               "stacked":false,
               "metrics":[

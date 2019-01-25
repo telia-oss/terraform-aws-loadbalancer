@@ -15,6 +15,8 @@ module "alb" {
   name_prefix = "example"
   vpc_id      = "${data.aws_vpc.main.id}"
 
+  add_cloudwatch_dashboard = "true"
+
   subnet_ids = [
     "${data.aws_subnet_ids.main.ids}",
   ]
