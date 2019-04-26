@@ -5,6 +5,8 @@ locals {
   name_prefix = "${var.name_prefix}-${var.type == "network" ? "nlb" : "alb"}"
 }
 
+data "aws_region" "current" {}
+
 resource "aws_lb" "main" {
   count = "${var.log_access == "false" ? 1 : 0}"
 
@@ -83,4 +85,62 @@ resource "aws_s3_bucket_policy" "elb_logs_policy" {
   ]
   }
   EOF
+}
+
+resource "aws_cloudwatch_dashboard" "main" {
+  dashboard_name = "${coalesce(join("",aws_lb.main.*.name), join("", aws_lb.main_with_access_logs.*.name))}"
+  count          = "${var.add_cloudwatch_dashboard == "true" ? 1:0}"
+
+  dashboard_body = <<EOF
+  {
+     "start":"-PT6H",
+     "periodOverride":"inherit",
+     "widgets":[
+       {
+         "type":"metric",
+         "x":0,
+         "y":0,
+         "width":4,
+         "height":6,
+         "properties": {
+            "view": "singleValue",
+            "metrics": [
+                [ "AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer",   "${substr(coalesce(join("",aws_lb.main.*.arn), join("", aws_lb.main_with_access_logs.*.arn)),65,-1)}" ]
+            ],
+            "region": "eu-west-1",
+            "period": 360
+          }
+        },
+        {
+           "type":"metric",
+           "x":5,
+           "y":0,
+           "width":20,
+           "height":6,
+           "properties":{
+              "title": "Request count & Average Responsetime",
+              "view":"timeSeries",
+              "stacked":false,
+              "metrics":[
+                 [
+                    "AWS/ApplicationELB",
+                    "TargetResponseTime",
+                    "LoadBalancer",
+                    "${substr(coalesce(join("",aws_lb.main.*.arn), join("", aws_lb.main_with_access_logs.*.arn)),65,-1)}"
+                 ],
+                 [
+                    "AWS/ApplicationELB",
+                    "RequestCount",
+                    "LoadBalancer",
+                    "${substr(coalesce(join("",aws_lb.main.*.arn), join("", aws_lb.main_with_access_logs.*.arn)),65,-1)}",
+                    {"stat": "Sum"}
+                 ]
+              ],
+              "region":"${data.aws_region.current.name}",
+              "period":300
+           }
+        }
+     ]
+  }
+ EOF
 }
