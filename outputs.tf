@@ -30,3 +30,8 @@ output "security_group_id" {
   description = "The ID of the security group."
   value       = "${element(concat(aws_security_group.main.*.id, list("")), 0)}"
 }
+
+output "access_logs_s3_bucket_arn" {
+  description = "The arn of the S3 bucket logs are written to. Empty if log_access set to \"false\""
+  value       = "${aws_s3_bucket.elb_logs.*.arn}"
+}

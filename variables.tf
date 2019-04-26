@@ -9,6 +9,11 @@ variable "vpc_id" {
   description = "The VPC ID."
 }
 
+variable "log_access" {
+  description = "Log access to S3. Defaults to false"
+  default     = "false"
+}
+
 variable "subnet_ids" {
   description = "ID of subnets where instances can be provisioned."
   type        = "list"
@@ -25,11 +30,6 @@ variable "internal" {
 
 variable "access_logs_prefix" {
   description = "Prefix for access log bucket items."
-  default     = ""
-}
-
-variable "access_logs_bucket" {
-  description = "Bucket for ELB access logs."
   default     = ""
 }
 
