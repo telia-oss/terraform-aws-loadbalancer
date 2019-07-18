@@ -9,7 +9,7 @@ data "aws_region" "current" {
 }
 
 resource "aws_lb" "main" {
-  count = var.log_access == "false" ? 1 : 0
+  count = var.log_access ? 1 : 0
 
   name               = local.name_prefix
   load_balancer_type = var.type
@@ -27,7 +27,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb" "main_with_access_logs" {
-  count              = var.log_access == "true" ? 1 : 0
+  count              = var.log_access ? 1 : 0
   name               = local.name_prefix
   load_balancer_type = var.type
   internal           = var.internal
@@ -78,13 +78,13 @@ data "aws_elb_service_account" "main" {
 }
 
 resource "aws_s3_bucket" "elb_logs" {
-  count         = var.log_access == "true" ? 1 : 0
+  count         = var.log_access ? 1 : 0
   bucket_prefix = "${var.name_prefix}-logs"
   acl           = "private"
 }
 
 resource "aws_s3_bucket_policy" "elb_logs_policy" {
-  count  = var.log_access == "true" ? 1 : 0
+  count  = var.log_access ? 1 : 0
   bucket = aws_s3_bucket.elb_logs[0].id
 
   policy = <<EOF
@@ -111,7 +111,7 @@ resource "aws_cloudwatch_dashboard" "main" {
     join("", aws_lb.main.*.name),
     join("", aws_lb.main_with_access_logs.*.name),
   )
-  count = var.add_cloudwatch_dashboard == "true" ? 1 : 0
+  count = var.add_cloudwatch_dashboard ? 1 : 0
 
   dashboard_body = <<EOF
   {
