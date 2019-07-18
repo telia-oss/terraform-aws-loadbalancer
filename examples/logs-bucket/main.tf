@@ -1,5 +1,5 @@
 terraform {
-  required_version = "0.11.11"
+  required_version = ">= 0.12"
 
   backend "s3" {
     key            = "terraform-modules/development/terraform-aws-vpc/logs-bucket.tfstate"
@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  version             = "1.54.0"
+  version             = ">= 2.17"
   region              = "eu-west-1"
   allowed_account_ids = ["<test-account-id>"]
 }
@@ -23,31 +23,26 @@ data "aws_vpc" "main" {
 }
 
 data "aws_subnet_ids" "main" {
-  vpc_id = "${data.aws_vpc.main.id}"
+  vpc_id = data.aws_vpc.main.id
 }
 
 module "alb" {
-  source      = "../../"
-  name_prefix = "alb-logs-bucket-test"
-  vpc_id      = "${data.aws_vpc.main.id}"
-
-  subnet_ids = [
-    "${data.aws_subnet_ids.main.ids}",
-  ]
-
-  idle_timeout = 120
+  source       = "../../"
+  name_prefix  = "alb-logs-bucket-test"
+  vpc_id       = data.aws_vpc.main.id
+  subnet_ids   = data.aws_subnet_ids.main.ids
   type         = "application"
+  idle_timeout = 120
+  log_access   = true
 
-  tags {
-    environment = "prod"
+  tags = {
+    environment = "dev"
     terraform   = "True"
   }
-
-  log_access = "true"
 }
 
 resource "aws_security_group_rule" "ingress_80" {
-  security_group_id = "${module.alb.security_group_id}"
+  security_group_id = module.alb.security_group_id
   type              = "ingress"
   protocol          = "tcp"
   from_port         = "80"
@@ -59,9 +54,10 @@ resource "aws_security_group_rule" "ingress_80" {
 }
 
 output "access_logs_bucket_arn" {
-  value = "${module.alb.access_logs_s3_bucket_arn}"
+  value = module.alb.access_logs_s3_bucket_arn
 }
 
 output "name" {
-  value = "${module.alb.name}"
+  value = module.alb.name
 }
+
