@@ -16,7 +16,7 @@ variable "log_access" {
 
 variable "subnet_ids" {
   description = "ID of subnets where instances can be provisioned."
-  type        = "list"
+  type        = list(string)
 }
 
 variable "type" {
@@ -40,7 +40,7 @@ variable "idle_timeout" {
 
 variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 
@@ -48,3 +48,4 @@ variable "add_cloudwatch_dashboard" {
   description = "If true, add a cloudwatch dashboard with metrics for the loadbalancer"
   default     = "false"
 }
+
