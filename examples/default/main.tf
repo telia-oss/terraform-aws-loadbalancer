@@ -1,5 +1,5 @@
 terraform {
-  required_version = "0.11.11"
+  required_version = ">= 0.12"
 
   backend "s3" {
     key            = "terraform-modules/development/terraform-aws-vpc/default.tfstate"
@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  version             = "1.54.0"
+  version             = ">= 2.17"
   region              = "eu-west-1"
   allowed_account_ids = ["<test-account-id>"]
 }
@@ -23,22 +23,19 @@ data "aws_vpc" "main" {
 }
 
 data "aws_subnet_ids" "main" {
-  vpc_id = "${data.aws_vpc.main.id}"
+  vpc_id = data.aws_vpc.main.id
 }
 
 module "alb" {
   source      = "../../"
   name_prefix = "loadbalancer-default-test"
-  vpc_id      = "${data.aws_vpc.main.id}"
+  vpc_id      = data.aws_vpc.main.id
+  subnet_ids  = data.aws_subnet_ids.main.ids
+  type        = "application"
 
-  subnet_ids = [
-    "${data.aws_subnet_ids.main.ids}",
-  ]
-
-  type = "application"
-
-  tags {
-    environment = "prod"
+  tags = {
+    environment = "dev"
     terraform   = "True"
   }
 }
+
