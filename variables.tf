@@ -51,9 +51,3 @@ variable "tags" {
   default     = {}
 }
 
-variable "add_cloudwatch_dashboard" {
-  description = "If true, add a cloudwatch dashboard with metrics for the loadbalancer"
-  type        = bool
-  default     = false
-}
-
