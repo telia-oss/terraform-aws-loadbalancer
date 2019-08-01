@@ -15,9 +15,8 @@ data "aws_subnet_ids" "main" {
   vpc_id = data.aws_vpc.main.id
 }
 
-# NOTE: You will have apply twice (or create the bucket first) due to a 
-# AWS provider issue. This has to do with the aws_s3_bucket and not the module.
-# See e2e tests for more details.
+# NOTE: You will have apply twice (or create the bucket first) due to a AWS provider issue.
+# This has to do with the aws_s3_bucket and not the module. See e2e tests for more details.
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = var.name_prefix
   region        = var.region
