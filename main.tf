@@ -15,7 +15,7 @@ resource "aws_lb" "main" {
 
   access_logs {
     bucket  = lookup(var.access_logs, "bucket", "")
-    prefix  = lookup(var.access_logs, "prefix", "")
+    prefix  = lookup(var.access_logs, "prefix", null)
     enabled = lookup(var.access_logs, "enabled", false)
   }
 
