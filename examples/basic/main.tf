@@ -15,7 +15,7 @@ data "aws_subnet_ids" "main" {
   vpc_id = data.aws_vpc.main.id
 }
 
-module "alb" {
+module "lb" {
   source      = "../../"
   name_prefix = var.name_prefix
   vpc_id      = data.aws_vpc.main.id

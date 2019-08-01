@@ -6,24 +6,6 @@ locals {
 }
 
 resource "aws_lb" "main" {
-  count              = var.access_logs_bucket == "" ? 1 : 0
-  name               = local.name_prefix
-  load_balancer_type = var.type
-  internal           = var.internal
-  subnets            = var.subnet_ids
-  security_groups    = aws_security_group.main.*.id
-  idle_timeout       = var.idle_timeout
-
-  tags = merge(
-    var.tags,
-    {
-      "Name" = local.name_prefix
-    },
-  )
-}
-
-resource "aws_lb" "main_with_access_logs" {
-  count              = var.access_logs_bucket == "" ? 0 : 1
   name               = local.name_prefix
   load_balancer_type = var.type
   internal           = var.internal
@@ -32,9 +14,9 @@ resource "aws_lb" "main_with_access_logs" {
   idle_timeout       = var.idle_timeout
 
   access_logs {
-    prefix  = var.access_logs_prefix
-    bucket  = var.access_logs_bucket
-    enabled = true
+    bucket  = lookup(var.access_logs, "bucket", "")
+    prefix  = lookup(var.access_logs, "prefix", "")
+    enabled = lookup(var.access_logs, "enabled", false)
   }
 
   tags = merge(
@@ -69,4 +51,3 @@ resource "aws_security_group_rule" "egress" {
   cidr_blocks       = ["0.0.0.0/0"]
   ipv6_cidr_blocks  = ["::/0"]
 }
-
