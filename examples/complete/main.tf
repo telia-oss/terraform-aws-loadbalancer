@@ -15,7 +15,9 @@ data "aws_subnet_ids" "main" {
   vpc_id = data.aws_vpc.main.id
 }
 
-# NOTE: You might have apply twice because of a AWS provider issue. See e2e tests for more details.
+# NOTE: You will have apply twice (or create the bucket first) due to a 
+# AWS provider issue. This has to do with the aws_s3_bucket and not the module.
+# See e2e tests for more details.
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = var.name_prefix
   region        = var.region
@@ -33,19 +35,37 @@ resource "aws_s3_bucket_policy" "bucket" {
   policy = data.aws_iam_policy_document.bucket.json
 }
 
+# Ref: https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-access-logs.html
+# (ALB: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions)
 data "aws_caller_identity" "current" {}
 
-# Ref: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
 data "aws_iam_policy_document" "bucket" {
   statement {
     principals {
-      type        = "AWS"
-      identifiers = [var.elastic_loadbalancing_account_id]
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
     }
-    sid       = "accesslogs"
+
     effect    = "Allow"
     actions   = ["s3:PutObject"]
     resources = ["${aws_s3_bucket.bucket.arn}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
+    }
+  }
+
+  statement {
+    principals {
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
+    }
+
+    effect    = "Allow"
+    actions   = ["s3:GetBucketAcl"]
+    resources = ["${aws_s3_bucket.bucket.arn}"]
   }
 }
 
