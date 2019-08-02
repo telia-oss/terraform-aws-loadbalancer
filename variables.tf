@@ -12,7 +12,7 @@ variable "vpc_id" {
 }
 
 variable "subnet_ids" {
-  description = "ID of subnets where instances can be provisioned."
+  description = "A list of subnet IDs to attach to the LB."
   type        = list(string)
 }
 
@@ -27,20 +27,14 @@ variable "internal" {
   default     = false
 }
 
-variable "access_logs_prefix" {
-  description = "Prefix for access log bucket items."
-  type        = string
-  default     = ""
-}
-
-variable "access_logs_bucket" {
-  description = "Bucket for ELB access logs."
-  type        = string
-  default     = ""
+variable "access_logs" {
+  description = "An Access Logs block."
+  type        = map(string)
+  default     = {}
 }
 
 variable "idle_timeout" {
-  description = "(Optional) The time in seconds that the connection is allowed to be idle. Only valid for Load Balancers of type application. Default: 60."
+  description = "(Optional) The time in seconds that the connection is allowed to be idle. Only valid for Load Balancers of type application."
   type        = number
   default     = 60
 }
@@ -50,10 +44,3 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
-
-variable "add_cloudwatch_dashboard" {
-  description = "If true, add a cloudwatch dashboard with metrics for the loadbalancer"
-  type        = bool
-  default     = false
-}
-
