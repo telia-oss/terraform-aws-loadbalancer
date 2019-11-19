@@ -6,6 +6,11 @@ output "arn" {
   value       = aws_lb.main.arn
 }
 
+output "arn_suffix" {
+  description = "The ARN suffix for use with CloudWatch Metrics."
+  value       = aws_lb.main.arn_suffix
+}
+
 output "name" {
   description = "The name of the load balancer."
   value       = element(split("/", aws_lb.main.name), 2)
