@@ -11,15 +11,18 @@ data "aws_vpc" "main" {
   default = true
 }
 
-data "aws_subnet_ids" "main" {
+data "aws_subnet_ids" "private" {
   vpc_id = data.aws_vpc.main.id
+  tags = {
+    Tier = "Private"
+  }
 }
 
 module "lb" {
   source      = "../../"
   name_prefix = var.name_prefix
   vpc_id      = data.aws_vpc.main.id
-  subnet_ids  = data.aws_subnet_ids.main.ids
+  subnet_ids  = data.aws_subnet_ids.private.ids
   type        = "application"
 
   tags = {
