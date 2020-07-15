@@ -48,9 +48,11 @@ variable "tags" {
 variable "enable_cross_zone_load_balancing" {
   description = "If true, cross-zone load balancing of the load balancer will be enabled. This is a network load balancer feature. Defaults to false."
   type        = bool
+  default     = false
 }
 
 variable "enable_deletion_protection" {
   description = "If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer. Defaults to false."
   type        = bool
+  default     = false
 }
