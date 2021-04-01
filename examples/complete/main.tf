@@ -1,10 +1,9 @@
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.14"
 }
 
 provider "aws" {
-  version = ">= 2.17"
-  region  = var.region
+  region = var.region
 }
 
 data "aws_vpc" "main" {
@@ -19,7 +18,6 @@ data "aws_subnet_ids" "main" {
 # This has to do with the aws_s3_bucket and not the module. See e2e tests for more details.
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = var.name_prefix
-  region        = var.region
   acl           = "private"
   force_destroy = true
 
@@ -64,7 +62,7 @@ data "aws_iam_policy_document" "bucket" {
 
     effect    = "Allow"
     actions   = ["s3:GetBucketAcl"]
-    resources = ["${aws_s3_bucket.bucket.arn}"]
+    resources = [aws_s3_bucket.bucket.arn]
   }
 }
 
