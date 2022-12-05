@@ -45,6 +45,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "ip_address_type" {
+  description = "The type of IP addresses used by the subnets for your load balancer. The possible values are \"ipv4\" and \"dualstack\"."
+  type        = string
+  default     = "ipv4"
+}
+
 variable "enable_cross_zone_load_balancing" {
   description = "If true, cross-zone load balancing of the load balancer will be enabled. This is a network load balancer feature. Defaults to false."
   type        = bool

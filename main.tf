@@ -12,6 +12,7 @@ resource "aws_lb" "main" {
   subnets                          = var.subnet_ids
   security_groups                  = aws_security_group.main.*.id
   idle_timeout                     = var.idle_timeout
+  ip_address_type                  = var.ip_address_type
   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
   enable_deletion_protection       = var.enable_deletion_protection
 
