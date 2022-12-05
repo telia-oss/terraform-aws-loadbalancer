@@ -6,13 +6,15 @@ locals {
 }
 
 resource "aws_lb" "main" {
-  name               = local.name_prefix
-  load_balancer_type = var.type
-  internal           = var.internal
-  subnets            = var.subnet_ids
-  security_groups    = aws_security_group.main.*.id
-  idle_timeout       = var.idle_timeout
-  ip_address_type    = var.ip_address_type
+  name                             = local.name_prefix
+  load_balancer_type               = var.type
+  internal                         = var.internal
+  subnets                          = var.subnet_ids
+  security_groups                  = aws_security_group.main.*.id
+  idle_timeout                     = var.idle_timeout
+  ip_address_type                  = var.ip_address_type
+  enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
+  enable_deletion_protection       = var.enable_deletion_protection
 
   access_logs {
     bucket  = lookup(var.access_logs, "bucket", "")
