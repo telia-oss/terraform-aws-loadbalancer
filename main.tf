@@ -12,6 +12,7 @@ resource "aws_lb" "main" {
   subnets            = var.subnet_ids
   security_groups    = aws_security_group.main.*.id
   idle_timeout       = var.idle_timeout
+  ip_address_type    = var.ip_address_type
 
   access_logs {
     bucket  = lookup(var.access_logs, "bucket", "")
