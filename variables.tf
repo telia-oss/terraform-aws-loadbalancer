@@ -44,3 +44,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "ip_address_type" {
+  description = "The type of IP addresses used by the subnets for your load balancer. The possible values are \"ipv4\" and \"dualstack\"."
+  type        = string
+  default     = "ipv4"
+}
